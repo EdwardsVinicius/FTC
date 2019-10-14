@@ -61,8 +61,6 @@ aux.push(3)
 if match is None:
     if (len(entrada) != 0):
         for i in entrada:
-            pilha.__print__()
-            aux.__print__()
 
             if i == '(' or i == '[' or i == '{':
                 pilha.push(i)
@@ -92,3 +90,16 @@ elif pilha.is_empty() and not aux.is_empty():
 
 else:
     print('nao casada')
+
+corrigido = entrada
+
+match = re.findall(r'\(\[|\(\{|\[\{|\]\)|\}\)|\}\]', entrada)
+
+for i in range(0, len(match)):
+    print(match[i], match[i][::-1])
+    a = re.escape(match[i])
+    b = re.escape(match[i][::-1])
+
+    corrigido = re.sub(a, b, corrigido)
+    corrigido = re.sub(r'\\', '', corrigido)
+    print(corrigido)
