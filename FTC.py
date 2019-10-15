@@ -37,69 +37,83 @@ def checkPop(i, c, o):
 
 
 #main
-pilha = Stack()
-aux = Stack()
-check = ''
-
 dic = {'(': 0, '[': 1, '{': 2}
-# lines = []
-# while True:
-#     line = input()
-#     if line != 'END':
-#         lines.append(line)
-#     else:
-#         lines.append('END')
-#         break
+incorretos = []
 
-entrada = '( { [ ] } )'
-match = re.search(r'[^\(\)\[\]\{\} ]', entrada)
-entrada = re.sub(r' +', '', entrada)
-print(entrada)
+lines = []
+while True:
+    line = input()
+    if line != '':
+        lines.append(line)
+    else:
+        break
+#print(lines)
 
-pilha.push('$')
-aux.push(3)
-if match is None:
-    if (len(entrada) != 0):
-        for i in entrada:
+for j in lines:
+    entrada = j
+    match = re.search(r'[^\(\)\[\]\{\} ]', entrada)
+    entrada = re.sub(r' +', '', entrada)
+    #print(entrada)
 
-            if i == '(' or i == '[' or i == '{':
-                pilha.push(i)
+    pilha = Stack()
+    aux = Stack()
+    # pilha.__print__()
+    # aux.__print__()
 
-                if aux.__gettop__() >= dic[i]:
-                    aux.push(dic[i])
-                else:
-                    aux.push(-1)
-                    
+    pilha.push('$')
+    aux.push(3)
+    if match is None:
+        if (len(entrada) != 0):
+            for i in entrada:
 
-            checkPop(i, ')', '(')
-            checkPop(i, ']', '[')
-            checkPop(i, '}', '{')
+                if i == '(' or i == '[' or i == '{':
+                    pilha.push(i)
 
-else:
-    print('character estranho')
+                    if aux.__gettop__() >= dic[i]:
+                        aux.push(dic[i])
+                    else:
+                        aux.push(-1)
+                        
 
-    
-pilha.pop()
-aux.pop()
+                if(pilha.__gettop__() == '$'):
+                    pilha.push(-1)
 
-if pilha.is_empty() and aux.is_empty():
-    print('casada e correta')
+                checkPop(i, ')', '(')
+                checkPop(i, ']', '[')
+                checkPop(i, '}', '{')
 
-elif pilha.is_empty() and not aux.is_empty():
-    print('casada e incorreta')
+    else:
+        print('character estranho')
 
-else:
-    print('nao casada')
+        
+    pilha.pop()
+    aux.pop()
 
-corrigido = entrada
+    if pilha.is_empty() and aux.is_empty():
+        print('casada e correta')
 
-match = re.findall(r'\(\[|\(\{|\[\{|\]\)|\}\)|\}\]', entrada)
+    elif pilha.is_empty() and not aux.is_empty():
+        print('casada e incorreta')
+        incorretos.append(entrada)
+        #print('incorretos = ', incorretos)
 
-for i in range(0, len(match)):
-    print(match[i], match[i][::-1])
-    a = re.escape(match[i])
-    b = re.escape(match[i][::-1])
+    else:
+        print('nao casada')
 
-    corrigido = re.sub(a, b, corrigido)
-    corrigido = re.sub(r'\\', '', corrigido)
+
+for k in incorretos:
+    corrigido = k
+
+    match = True
+    while match:
+        match = re.findall(r'\(\[|\(\{|\[\{|\]\)|\}\)|\}\]', corrigido)
+
+        for i in range(0, len(match)):
+            #print(match[i], match[i][::-1])
+            a = re.escape(match[i])
+            b = re.escape(match[i][::-1])
+
+            corrigido = re.sub(a, b, corrigido)
+            corrigido = re.sub(r'\\', '', corrigido)
+            
     print(corrigido)
